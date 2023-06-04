@@ -10,7 +10,6 @@ page_title = "Burning Cinema Register"
 page_icon = "🎥"
 
 # ----------------------------------------
-print(f"Logging Level: {logging.getLevelName(log.getEffectiveLevel())}")
 
 st.set_page_config(page_title=page_title, page_icon=page_icon, layout="centered", initial_sidebar_state="auto")
 
