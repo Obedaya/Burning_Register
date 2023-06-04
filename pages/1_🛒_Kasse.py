@@ -1,85 +1,80 @@
 import streamlit as st
+from utilities import database as db, modules as mod
+import pandas as pd
+
+categories = db.group_by("inventory", "category")
+products = list(db.find_all("inventory"))
+sorted_list = sorted(categories, key=lambda x: x['_id'])
+
+def clear_products():
+    st.session_state["isteam"] = False
+    for product in products:
+        st.session_state.setdefault("cart", {})
+        st.session_state["cart"][product["name"]] = 0
+    st.session_state["init"] = True
 
 
-def create_section(title, products, prices, session_state):
-    if title not in session_state:
-        session_state[title] = {}
-
-    for product, price in zip(products, prices):
-        if product not in session_state[title]:
-            session_state[title][product] = {'count': 0, 'price': price}
-
-        if st.button(product):
-            session_state[title][product]['count'] += 1
-            st.experimental_rerun()
-
-
-def create_cash_register(drinks, snacks, drinks_prices, snacks_prices):
-    session_state = st.session_state
-
-    for section, section_products, section_prices in zip(["Drinks", "Snacks"], [drinks, snacks], [drinks_prices, snacks_prices]):
-        st.markdown(f"## {section}")
-        create_section(section.lower(), section_products, section_prices, session_state)
-
+def cart_menu():
     with st.sidebar:
         st.markdown("## Selected Products")
-        selected_products = {}
-
-        for section in ["drinks", "snacks"]:
-            selected_products.update(session_state.get(section, {}))
-
-        selected_products = {product: data for product, data in selected_products.items() if data['count'] > 0}
-
-        total_price = 0
-
-        for product, data in selected_products.items():
-            count = data['count']
-            price = data['price']
-            total_product_price = count * price
-            total_price += total_product_price
-            st.write(f"- {product} (Count: {count}, Price: {price}, Total: {round(total_product_price)})")
-            remove_button = st.button(f"Remove {product}")
-            if remove_button:
-                for section in ["drinks", "snacks"]:
-                    if product in session_state.get(section, {}):
-                        session_state[section][product]['count'] = 0
-                st.experimental_rerun()
-
+        plist = []
+        for product in products:
+            if st.session_state["cart"][product["name"]] > 0:
+                plist.append({
+                    "name": product["name"],
+                    "amount": st.session_state["cart"][product["name"]],
+                    "price": product["price"] if not st.session_state["isteam"] else product["price_team"],
+                    "category": product["category"]
+                })
+        for product in plist:
+            col = st.columns([2,1,1])
+            col[0].markdown(f'{product["name"]}')
+            col[1].markdown(f'{product["amount"]}')
+            col[2].markdown('{:.2f}€'.format(product["price"] * product["amount"]))
+        
+        st.divider()
         col1, col2 = st.columns(2)
 
-        sum_button = col1.button("Sum")
-        clear_button = col2.button("Clear all", type="primary")
-
-        if clear_button:
-            for section in ["drinks", "snacks"]:
-                for product in session_state.get(section, {}):
-                    session_state[section][product]['count'] = 0
+        checkout_button = col1.button("Checkout")
+        if col2.button("Clear all", type="primary"):
+            clear_products()
             st.experimental_rerun()
 
-        if sum_button:
-            for section in ["drinks", "snacks"]:
-                for product in session_state.get(section, {}):
-                    session_state[section][product]['count'] = 0
-            st.experimental_rerun()
+        total = 0
+        for product in plist:
+            total += product["price"] * product["amount"]
+        st.markdown(f'Total: **{total:.2f}€**')
+        with st.expander("Additional Options"):
+            st.session_state["isteam"] = st.checkbox("Is a Team Member", value=st.session_state["isteam"])
+        
+        if checkout_button:
+            if len(plist) != 0:
+                db.checkout(plist, st.session_state["isteam"], total, st.session_state["movie"])
+                clear_products()
+                plist = []
+                st.experimental_rerun()
+            else:
+                st.sidebar.error("Cart is empty")
 
-        st.write(f"Total Price: {round(total_price, 2)}")
+
+def add_to_cart(item):
+    st.session_state["cart"][item] += 1
+
+def remove_from_cart(item):
+    if st.session_state["cart"][item] > 0:
+        st.session_state["cart"][item] -= 1
+
+def create_register():
+    for doc in sorted_list:
+        st.markdown(f'## {doc["_id"]}')
+        for item in doc["items"]:
+            col1, col2 = st.columns(2)
+            col1.button(item["name"], on_click=add_to_cart, args=(item["name"],), key=item["name"])
+            col2.button(f'Remove {item["name"]}', on_click=remove_from_cart, args=(item["name"],), key=f'{item["name"]}_del', type="primary")
 
 
-movies = ['Babydriver', 'Contra', 'Mad Max']
-drinks = ['Bier', 'Almdudler', 'Wasser', 'Cola']
-snacks = ['Nachos', 'Popcorn']
-drinks_prices = [1.99, 2.49, 1.5, 2.5]
-snacks_prices = [0.99, 1.99]
-
-drink_counts = [0] * len(drinks)
-
-option = st.selectbox(
-        'Select movie',
-        movies)
-
-for i in movies:
-    if option == i:
-        # Select different source
-        p = None
-
-create_cash_register(drinks, snacks, drinks_prices, snacks_prices)
+if "init" not in st.session_state:
+    clear_products()
+mod.create_movie_selection()
+create_register()
+cart_menu()
