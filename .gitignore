@@ -4,3 +4,4 @@ venv
 .venv
 .env
 reports/
+__pycache__/

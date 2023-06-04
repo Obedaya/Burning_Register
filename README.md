@@ -5,4 +5,6 @@
 ```bash
 MONGO_PASSWORD=example
 MONGO_URL=mongodb+srv://username:${MONGO_PASSWORD}@examplemongo.com
+PREAUTHMAIL=test@example.com,test2@example.com
+ADMINUSERS=testuser,testuser2
 ```

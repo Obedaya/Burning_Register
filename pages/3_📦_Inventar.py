@@ -1,5 +1,5 @@
 import streamlit as st
-from utilities import database as db
+from utilities import database as db, modules as mod
 import pandas as pd
 import json
 
@@ -116,10 +116,12 @@ def show_inventory():
         
 
 
+def init_content():
+    menu()
+    prod_postion = st.empty()
+    show_inventory()
+    if st.session_state["add_product"]:
+        with prod_postion:
+            add_product()
 
-menu()
-prod_postion = st.empty()
-show_inventory()
-if st.session_state["add_product"]:
-    with prod_postion:
-        add_product()
+mod.auth_module(init_content, "inventory")

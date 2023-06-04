@@ -45,11 +45,12 @@ def tickets_sold_in_movie():
 def clubcard_sold_in_movie():
     return amount_sold_in_movie()["Clubkarte"]
 
-mod.create_movie_selection()
-st.markdown(f"Total sold in {st.session_state['movie']}: **{total_sold_in_movie():.2f}€**")
+
 
 
 def movie_report_excel():
+    mod.create_movie_selection()
+    st.markdown(f"Total sold in {st.session_state['movie']}: **{total_sold_in_movie():.2f}€**")
     datalist = []
     amsold =amount_sold_in_movie()
     for product in amsold:
@@ -71,5 +72,8 @@ def movie_report_excel():
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
 
-movie_report_excel()
+def init_content():
+    movie_report_excel()
+
+mod.auth_module(init_content, "finances")
 

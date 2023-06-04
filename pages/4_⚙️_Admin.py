@@ -2,6 +2,12 @@ import streamlit as st
 from utilities import database as db, modules as mod
 import datetime
 import pymongo
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+adminusers = list(os.getenv("ADMINUSERS").split(","))
 
 if "add_movie" not in st.session_state:
     st.session_state["add_movie"] = False
@@ -73,12 +79,17 @@ def movielist():
         col[1].write(movie["datetime"].strftime("%d.%m.%Y %H:%M:%S"))
         col[2].write(movie["room"])
 
-    
-menu()
-prod_postion = st.empty()
-if st.session_state["add_movie"]:
-    with prod_postion:
-        add_movie()
+def init_content():
+    if st.session_state["username"] in adminusers:
+        menu()
+        prod_postion = st.empty()
+        if st.session_state["add_movie"]:
+            with prod_postion:
+                add_movie()
 
-history_cancellation()
-movielist()
+        history_cancellation()
+        movielist()
+    else:
+        st.error("You are not authorized to view this page.")
+    
+mod.auth_module(init_content, "admin")

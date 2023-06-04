@@ -27,6 +27,12 @@ def delete(collection, id):
     col = db[collection]
     col.delete_one({"_id": ObjectId(id)})
 
+def collection_exists(collection):
+    return collection in db.list_collection_names()
+
+def create_collection(collection):
+    db.create_collection(collection)
+
 
 import numpy as np
 
@@ -79,6 +85,10 @@ def group_by(collection, group_by):
         }
     ])
     return list(result)
+
+def replace(collection, id, document):
+    col = db[collection]
+    col.replace_one({"_id": ObjectId(id)}, document)
 
 def checkout(productlist, isteam, total, movie):
     for product in productlist:
