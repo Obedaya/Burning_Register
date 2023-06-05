@@ -1,6 +1,7 @@
 import streamlit as st
 from utilities import database as db, modules as mod
 import pandas as pd
+import os
 
 
 def total_sold_in_movie():
@@ -59,11 +60,14 @@ def movie_report_excel():
             "Price": list(db.find_all("inventory", {"name": product}))[0]["price"],
             "Total": amsold[product] * list(db.find_all("inventory", {"name": product}))[0]["price"]
         })
+    if not os.path.exists("reports"):
+        os.makedirs("reports")
     sales = pd.DataFrame(datalist)
     writer = pd.ExcelWriter(f"reports/{st.session_state['movie']}.xlsx", engine='xlsxwriter')
     sales.to_excel(writer, sheet_name='All Sales', index=False)
     writer.close()
     st.dataframe(sales)
+
     st.download_button(
         label="Download Excel Report",
         data=open(f"reports/{st.session_state['movie']}.xlsx", "rb").read(),
