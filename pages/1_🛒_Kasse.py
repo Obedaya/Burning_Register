@@ -73,11 +73,8 @@ def create_register():
             col2.button(f'Remove {item["name"]}', on_click=remove_from_cart, args=(item["name"],), key=f'{item["name"]}_del', type="primary")
 
 
-def init_content():
-    if "init" not in st.session_state:
-        clear_products()
-    mod.create_movie_selection()
-    create_register()
-    cart_menu()
-
-mod.auth_module(init_content, "register")
+if "init" not in st.session_state:
+    clear_products()
+mod.create_movie_selection()
+create_register()
+cart_menu()
