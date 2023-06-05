@@ -8,6 +8,7 @@ from datetime import datetime
 load_dotenv()
 
 mongourl = os.getenv("MONGO_URL")
+database_name = os.getenv("MONGO_DATABASE_NAME")
 
 def insert(collection, document):
     try:
@@ -99,8 +100,20 @@ def checkout(productlist, isteam, total, movie):
     insert("history", checkout_history)
 
 
+def init_db():
+    collections = db.list_collection_names()
+    if not "inventory" in collections:
+        db.create_collection("inventory")
+        print("Created inventory collection")
+    if not "history" in collections:
+        db.create_collection("history")
+        print("Created history collection")
+    if not "movies" in collections:
+        db.create_collection("movies")
+        print("Created movies collection")
 
+    
 
 # Create a new client and connect to the server
 client = MongoClient(mongourl)
-db = client['BurningRegister']
+db = client[str(database_name)]

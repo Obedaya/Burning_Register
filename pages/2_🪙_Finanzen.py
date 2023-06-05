@@ -46,8 +46,8 @@ def tickets_sold_in_movie():
 def clubcard_sold_in_movie():
     return amount_sold_in_movie()["Clubkarte"]
 
-mod.create_movie_selection()
-st.markdown(f"Total sold in {st.session_state['movie']}: **{total_sold_in_movie():.2f}€**")
+
+
 
 
 def movie_report_excel():
@@ -108,12 +108,16 @@ def product_report():
     st.dataframe(pd.DataFrame(amount_sold_in_movie(), index=[0]))
 
 def init_pages():
-    tab = st.tabs(["Total", "Products", "Excel Report"])
-    with tab[0]:
-        total_report()
-    with tab[1]:
-        product_report()
-    with tab[2]:
-        movie_report_excel()
+    mod.create_movie_selection()
+    if len(st.session_state["movie"]) > 0:
+        tab = st.tabs(["Total", "Products", "Excel Report"])
+        with tab[0]:
+            total_report()
+        with tab[1]:
+            product_report()
+        with tab[2]:
+            movie_report_excel()
+    else:
+        st.warning("Please create a movie first.")
 
 init_pages()

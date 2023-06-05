@@ -5,4 +5,5 @@
 ```bash
 MONGO_PASSWORD=example
 MONGO_URL=mongodb+srv://username:${MONGO_PASSWORD}@examplemongo.com
+MONGO_DATABASE_NAME=database
 ```

@@ -9,6 +9,9 @@ def movielist_names():
 def create_movie_selection():
     movies = movielist_names()
     if "movie" not in st.session_state:
-        st.session_state["movie"] = movies[0]
-    st.session_state["movie"] = st.selectbox("Select movie", options=movies, index= 0 if "movie" not in st.session_state else movies.index(st.session_state["movie"]))
+        if len(movies) == 0:
+            st.session_state["movie"] = []
+        else:
+            st.session_state["movie"] = movies[0]
+            st.session_state["movie"] = st.selectbox("Select movie", options=movies, index= 0 if "movie" not in st.session_state else movies.index(st.session_state["movie"]))
 
