@@ -51,22 +51,42 @@ st.markdown(f"Total sold in {st.session_state['movie']}: **{total_sold_in_movie(
 
 
 def movie_report_excel():
-    datalist = []
+    #Sales Sheet
+    saleslist = []
     amsold =amount_sold_in_movie()
     for product in amsold:
-        datalist.append({
+        saleslist.append({
             "Name": product,
             "Amount": amsold[product],
             "Price": list(db.find_all("inventory", {"name": product}))[0]["price"],
             "Total": amsold[product] * list(db.find_all("inventory", {"name": product}))[0]["price"]
         })
+    sales = pd.DataFrame(saleslist)
+    #Total Sold Summary Sheet
+    total_sold_list = {
+        "Movie": st.session_state["movie"],
+        "Total Sold": total_sold_in_movie(),
+        "Total Sold to Guests": total_sold_in_movie_guests(),
+        "Total Sold to Team": total_sold_in_movie_team(),
+        "Total Tickets Sold": tickets_sold_in_movie(),
+        "Total Clubcards Sold": clubcard_sold_in_movie()
+    }
+    total_sold = pd.DataFrame(total_sold_list, index=[0])
+
+
+
     if not os.path.exists("reports"):
         os.makedirs("reports")
-    sales = pd.DataFrame(datalist)
+    
     writer = pd.ExcelWriter(f"reports/{st.session_state['movie']}.xlsx", engine='xlsxwriter')
-    sales.to_excel(writer, sheet_name='All Sales', index=False)
+    sales.to_excel(writer, sheet_name='Sales', index=False)
+    total_sold.to_excel(writer, sheet_name='Total Sold', index=False)
     writer.close()
-    st.dataframe(sales)
+    col = st.columns(2)
+    with col[0]:
+        st.dataframe(sales)
+    with col[1]:
+        st.dataframe(total_sold.transpose())
 
     st.download_button(
         label="Download Excel Report",
@@ -75,5 +95,25 @@ def movie_report_excel():
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
 
-movie_report_excel()
+def total_report():
+    st.subheader(f"Total sold in {st.session_state['movie']}:")
+    st.markdown(f"Total sold in {st.session_state['movie']}: **{total_sold_in_movie():.2f}€**")
+    st.markdown(f"Total sold in {st.session_state['movie']} by guests: **{total_sold_in_movie_guests():.2f}€**")
+    st.markdown(f"Total sold in {st.session_state['movie']} by team: **{total_sold_in_movie_team():.2f}€**")
+    st.markdown(f"Total tickets sold in {st.session_state['movie']}: **{tickets_sold_in_movie()}**")
+    st.markdown(f"Total clubcards sold in {st.session_state['movie']}: **{clubcard_sold_in_movie()}**")
 
+def product_report():
+    st.subheader(f"Amount sold per product in {st.session_state['movie']}:")
+    st.dataframe(pd.DataFrame(amount_sold_in_movie(), index=[0]))
+
+def init_pages():
+    tab = st.tabs(["Total", "Products", "Excel Report"])
+    with tab[0]:
+        total_report()
+    with tab[1]:
+        product_report()
+    with tab[2]:
+        movie_report_excel()
+
+init_pages()
