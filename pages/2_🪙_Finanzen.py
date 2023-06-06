@@ -98,8 +98,8 @@ def movie_report_excel():
 def total_report():
     st.subheader(f"Total sold in {st.session_state['movie']}:")
     st.markdown(f"Total sold in {st.session_state['movie']}: **{total_sold_in_movie():.2f}€**")
-    st.markdown(f"Total sold in {st.session_state['movie']} by guests: **{total_sold_in_movie_guests():.2f}€**")
-    st.markdown(f"Total sold in {st.session_state['movie']} by team: **{total_sold_in_movie_team():.2f}€**")
+    st.markdown(f"Total sold in {st.session_state['movie']} to guests: **{total_sold_in_movie_guests():.2f}€**")
+    st.markdown(f"Total sold in {st.session_state['movie']} to team: **{total_sold_in_movie_team():.2f}€**")
     st.markdown(f"Total tickets sold in {st.session_state['movie']}: **{tickets_sold_in_movie()}**")
     st.markdown(f"Total clubcards sold in {st.session_state['movie']}: **{clubcard_sold_in_movie()}**")
 
