@@ -58,6 +58,8 @@ def cart_menu():
 
 
 def add_to_cart(item):
+    if db.find_by_name("inventory", item)["category"] == "Drinks":
+        st.session_state["cart"]["Pfand"] += 1
     st.session_state["cart"][item] += 1
 
 def remove_from_cart(item):
