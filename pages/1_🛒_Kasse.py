@@ -64,6 +64,9 @@ def add_to_cart(item):
 
 def remove_from_cart(item):
     if st.session_state["cart"][item] > 0:
+        if db.find_by_name("inventory", item)["category"] == "Drinks":
+            if st.session_state["cart"]["Pfand"] > 0:
+                st.session_state["cart"]["Pfand"] -= 1
         st.session_state["cart"][item] -= 1
 
 def create_register():
