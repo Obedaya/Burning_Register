@@ -54,6 +54,15 @@ def add_movie():
             st.experimental_rerun()
 
 
+def cancel_inventory_products(productlist):
+    for product in productlist:
+        previous = db.find_by_name("inventory", product["name"])
+        if previous is None:
+            raise Exception(f'Product {product["name"]} not found in database.')
+        previous_amount = int(previous["amount"])
+        db.edit_by_name("inventory", product["name"], {"amount": previous_amount + product["amount"] })
+
+
 def history_cancellation():
     st.subheader("Cancellations")
     mod.create_movie_selection()
@@ -64,6 +73,7 @@ def history_cancellation():
     selection = st.selectbox("Select movie", options=histlist)
     if st.button("Cancel") and selection is not None:
         db.edit_by_query("history", {"timestamp": selection["timestamp"]}, {"cancellation": True})
+        cancel_inventory_products(selection["products"])
 
 def movielist():
     st.subheader("Movies")
