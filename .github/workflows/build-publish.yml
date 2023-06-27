@@ -28,4 +28,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ github.repository_owner }}/${{ github.repository }}:${{ github.ref | replace('/', '-') }}, ${{ github.repository_owner }}/${{ github.repository }}:latest
+          tags: ${{ github.repository_owner }}/${{ github.repository }}:latest
