@@ -28,4 +28,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: obedaya/burningcinema:latest
+          tags: ghcr.io/obedaya/burningcinema:latest
