@@ -24,4 +24,4 @@ COPY . .
 EXPOSE 8501
 
 # Run the Streamlit app
-CMD ["streamlit", "run", "--server.enableCORS", "false", "your_app_file.py"]
+CMD ["streamlit", "run", "--server.enableCORS", "false", "--server.enableXsrfProtection", "false", "Home.py"]
