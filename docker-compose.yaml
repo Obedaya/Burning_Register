@@ -2,9 +2,7 @@
 version: "3"
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/obedaya/burning_register:latest
     ports:
       - 8501:8501
     environment:
