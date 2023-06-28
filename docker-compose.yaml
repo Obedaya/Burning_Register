@@ -1,0 +1,29 @@
+---
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8501:8501
+    environment:
+      - MONGO_PASSWORD=your_mongo_password
+      - MONGO_URL=your_mongo_url
+      - MONGO_DATABASE_NAME=your_mongo_database_name
+      - PREAUTHMAIL=your_preauthmail
+      - ADMINUSERS=your_adminusers
+    # Add any additional configuration for the app service
+
+  database:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=your_root_password
+    volumes:
+      - ./data:/data/db
+    # Add any additional configuration for the database service
+
+  # Add more services as needed
+
+# Add any additional configurations at the root level
