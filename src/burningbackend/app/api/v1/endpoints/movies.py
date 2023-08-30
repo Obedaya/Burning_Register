@@ -1,4 +1,4 @@
-from burningbackend.app.models.movie import Movie
+from burningbackend.app.models.movie import Movie, UpdateMovie
 
 from fastapi import APIRouter
 from fastapi import HTTPException
@@ -29,7 +29,7 @@ async def get_movie(id: str) -> Movie:
     return movie
 
 @router.put("/{id}", response_description="Movie data updated")
-async def update_movie(id: str, req: Movie) -> dict:
+async def update_movie(id: str, req: UpdateMovie) -> dict:
     req = {k: v for k, v in req.dict().items() if v is not None}
     update_query = {"$set": {
         field: value for field, value in req.items()
@@ -40,7 +40,7 @@ async def update_movie(id: str, req: Movie) -> dict:
             status_code=404,
             detail="Movie record not found"
         )
-    updated_movie = await movie.set(update_query)
+    updated_movie = await movie.update(update_query)
     return {"message": "Movie updated successfully", "data": updated_movie}
 
 @router.delete("/{id}", response_description="Movie deleted from the database")

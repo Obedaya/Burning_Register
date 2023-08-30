@@ -7,6 +7,7 @@ from beanie import Document
 # initialize them on startup.
 from .user import User
 from .movie import Movie
+from .inventory import Inventory
 
 DocType = TypeVar("DocType", bound=Document)
 
