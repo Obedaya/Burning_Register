@@ -41,7 +41,7 @@ def amount_sold_in_movie():
     return amount_sold
 
 def tickets_sold_in_movie():
-    return amount_sold_in_movie()["Ticket"]
+    return amount_sold_in_movie()["Ticket"] + amount_sold_in_movie()["Freiticket"]
 
 def clubcard_sold_in_movie():
     return amount_sold_in_movie()["Clubkarte"]

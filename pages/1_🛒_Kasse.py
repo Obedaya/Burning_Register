@@ -44,8 +44,8 @@ def cart_menu():
         for product in plist:
             total += product["price"] * product["amount"]
         st.markdown(f'Total: **{total:.2f}€**')
-        with st.expander("Additional Options"):
-            st.session_state["isteam"] = st.checkbox("Is a Team Member", value=st.session_state["isteam"])
+        #with st.expander("Additional Options"):
+        st.session_state["isteam"] = st.checkbox("Is a Team Member", value=st.session_state["isteam"])
         
         if checkout_button:
             if len(plist) != 0:
