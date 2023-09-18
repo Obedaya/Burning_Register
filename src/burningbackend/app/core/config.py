@@ -16,8 +16,8 @@ class Settings(BaseSettings):
     CORS_ORIGINS: list[str] = []
     USE_CORRELATION_ID: bool = True
 
-    UVICORN_HOST: str
-    UVICORN_PORT: int
+    UVICORN_HOST: str = "127.0.0.1"
+    UVICORN_PORT: int = 8080
 
     # Logging
     LOG_LEVEL: str = LogLevel.INFO
@@ -27,9 +27,9 @@ class Settings(BaseSettings):
     MONGODB_DB_NAME: str = "burningregister"
 
     # Superuser
-    FIRST_SUPERUSER: str
-    FIRST_SUPERUSER_EMAIL: EmailStr
-    FIRST_SUPERUSER_PASSWORD: str
+    FIRST_SUPERUSER: str = "admin"
+    FIRST_SUPERUSER_EMAIL: EmailStr = "admin@example.com"
+    FIRST_SUPERUSER_PASSWORD: str = "changeme"
 
     # Authentication
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 1  # 60 minutes * 24 hours * 1 = 1 day
@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     class Config:
         # Place your .env file under this path
         env_file = ".env"
-        env_prefix = "BURNINGBACKEND_"
+        env_prefix = ""
         case_sensitive = True
 
 settings = Settings()  # type: ignore[call-arg]
