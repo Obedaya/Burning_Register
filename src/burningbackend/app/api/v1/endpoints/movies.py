@@ -22,7 +22,6 @@ async def get_movie_by_name(name: str) -> Movie:
     if movie is None:
         raise HTTPException(status_code=404, detail="Movie not found")
     return movie
-
 @router.get("/{id}", response_description="Movie retrieved")
 async def get_movie(id: str) -> Movie:
     movie = await Movie.get(id)

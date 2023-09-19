@@ -7,7 +7,7 @@ from pydantic.fields import Field
 from pydantic import BaseModel
 
 
-class Categories(str, Enum):
+class Category(str, Enum):
     DRINKS = 'Drinks'
     SNACKS = 'Snacks'
     SWEETS = 'Sweets'
@@ -20,7 +20,7 @@ class Inventory(Document):
     price: float
     price_team: float
     amount_sold: int = 0
-    categrory: Categories = Categories.DRINKS
+    categrory: Category = Category.DRINKS
 
     class Settings:
         name = "inventory"
@@ -32,4 +32,4 @@ class UpdateInventory(BaseModel):
     price: Optional[float] = None
     price_team: Optional[float] = None
     amount_sold: Optional[int] = None
-    categrory: Optional[Categories] = None
+    categrory: Optional[Category] = None

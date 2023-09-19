@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     class Config:
         # Place your .env file under this path
         env_file = ".env"
-        env_prefix = ""
+        env_prefix = "" 
         case_sensitive = True
 
 settings = Settings()  # type: ignore[call-arg]
