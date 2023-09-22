@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
 
 from burningbackend.app.core.config import settings
@@ -25,6 +26,19 @@ app = FastAPI(
     },
 )
 
+
+
 #app.mount("/static", StaticFiles(directory="burningbackend/app/static"), name="static")
 
 app.include_router(api.router)
+
+origins = ["http://localhost:8080",
+           "http://localhost:9090",]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
