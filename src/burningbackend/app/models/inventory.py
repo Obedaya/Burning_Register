@@ -20,7 +20,7 @@ class Inventory(Document):
     price: float
     price_team: float
     amount_sold: int = 0
-    categrory: Category = Category.DRINKS
+    category: Category = Category.DRINKS
 
     class Settings:
         name = "inventory"

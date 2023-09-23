@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from beanie import Document, Indexed
 from pydantic.fields import Field
@@ -20,7 +20,7 @@ class History(Document):
     isteam: bool = False
     movie: str
     cancellation: bool = False
-    products: list(Product())
+    products: List[Product]
 
 
     class Settings:
