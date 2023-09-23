@@ -26,19 +26,18 @@ app = FastAPI(
     },
 )
 
-
-
 #app.mount("/static", StaticFiles(directory="burningbackend/app/static"), name="static")
 
 app.include_router(api.router)
 
-origins = ["http://localhost:8080",
-           "http://localhost:9090",]
+if settings.CORS_ORIGINS:
+    from fastapi.middleware.cors import CORSMiddleware
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.CORS_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    

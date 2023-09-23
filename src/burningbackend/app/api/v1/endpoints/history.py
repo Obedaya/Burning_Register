@@ -3,11 +3,10 @@ from burningbackend.app.models.history import History, UpdateHistory
 from fastapi import APIRouter
 from fastapi import HTTPException
 
-
 router = APIRouter()
 
 @router.get("/", response_description="History retrieved")
-async def get_history(movie: str = None) -> list[history]:
+async def get_history(movie: str = None) -> list[History]:
     if movie is None:
         history = await history.all().to_list()
         return history

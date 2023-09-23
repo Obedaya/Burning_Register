@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     # CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000"]'
-    CORS_ORIGINS: list[str] = []
+    CORS_ORIGINS: list[str] = ["http://localhost:8080"]
     USE_CORRELATION_ID: bool = True
 
     UVICORN_HOST: str = "127.0.0.1"

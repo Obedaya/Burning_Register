@@ -8,6 +8,7 @@ from beanie import Document
 from .user import User
 from .movie import Movie
 from .inventory import Inventory
+from .history import History
 
 DocType = TypeVar("DocType", bound=Document)
 
