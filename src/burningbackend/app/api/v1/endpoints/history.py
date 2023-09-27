@@ -17,7 +17,7 @@ async def get_history(movie: str = None) -> list[History]:
 @router.post("/", response_description="History Item added to the database")
 async def add_history(history: History) -> dict:
     await history.create()
-    history = await History.find_one({"name": history.name})
+    history = await History.find_one({"timestamp": history.timestamp})
     return {"message": "History added successfully", "data": history}
 
 @router.post("/cancel/", response_description="Canceled booked order")
