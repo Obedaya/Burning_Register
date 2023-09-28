@@ -17,7 +17,7 @@ class Product(BaseModel):
 class History(Document):
     timestamp: datetime
     total: float
-    isteam: bool = False
+    isteam: bool 
     movie: str
     cancellation: bool = False
     products: List[Product]
