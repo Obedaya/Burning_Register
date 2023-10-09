@@ -9,6 +9,9 @@ def total_sold_in_movie():
     total_sold = 0
     for order in orders:
         total_sold += order["total"]
+        for product in order["products"]:
+            if product["name"] == "Pfand":
+                total_sold -= product["amount"] * product["price"]
     return total_sold
 
 def total_sold_in_movie_guests():
@@ -17,6 +20,9 @@ def total_sold_in_movie_guests():
     for order in orders:
         if not order["isteam"]:
             total_sold += order["total"]
+            for product in order["products"]:
+                if product["name"] == "Pfand":
+                    total_sold -= product["amount"] * product["price"]
     return total_sold
 
 def total_sold_in_movie_team():
@@ -25,6 +31,9 @@ def total_sold_in_movie_team():
     for order in orders:
         if order["isteam"]:
             total_sold += order["total"]
+            for product in order["products"]:
+                if product["name"] == "Pfand":
+                    total_sold -= product["amount"] * product["price"]
     return total_sold
 
 def amount_sold_in_movie():
@@ -65,10 +74,10 @@ def movie_report_excel():
     #Total Sold Summary Sheet
     total_sold_list = {
         "Movie": st.session_state["movie"],
-        "Total Sold": total_sold_in_movie(),
-        "Total Sold to Guests": total_sold_in_movie_guests(),
-        "Total Sold to Team": total_sold_in_movie_team(),
-        "Total Tickets Sold": tickets_sold_in_movie(),
+        "Total Sold without Pfand": total_sold_in_movie(),
+        "Total Sold without Pfand to Guests": total_sold_in_movie_guests(),
+        "Total Sold without Pfand to Team": total_sold_in_movie_team(),
+        "Total Tickets": tickets_sold_in_movie(),
         "Total Clubcards Sold": clubcard_sold_in_movie()
     }
     total_sold = pd.DataFrame(total_sold_list, index=[0])
@@ -97,10 +106,10 @@ def movie_report_excel():
 
 def total_report():
     st.subheader(f"Total sold in {st.session_state['movie']}:")
-    st.markdown(f"Total sold in {st.session_state['movie']}: **{total_sold_in_movie():.2f}€**")
-    st.markdown(f"Total sold in {st.session_state['movie']} to guests: **{total_sold_in_movie_guests():.2f}€**")
-    st.markdown(f"Total sold in {st.session_state['movie']} to team: **{total_sold_in_movie_team():.2f}€**")
-    st.markdown(f"Total tickets sold in {st.session_state['movie']}: **{tickets_sold_in_movie()}**")
+    st.markdown(f"Total sold in {st.session_state['movie']} without Pfand: **{total_sold_in_movie():.2f}€**")
+    st.markdown(f"Total sold in {st.session_state['movie']} without Pfand to guests: **{total_sold_in_movie_guests():.2f}€**")
+    st.markdown(f"Total sold in {st.session_state['movie']} without Pfand to team: **{total_sold_in_movie_team():.2f}€**")
+    st.markdown(f"Total tickets in {st.session_state['movie']}: **{tickets_sold_in_movie()}**")
     st.markdown(f"Total clubcards sold in {st.session_state['movie']}: **{clubcard_sold_in_movie()}**")
 
 def product_report():
